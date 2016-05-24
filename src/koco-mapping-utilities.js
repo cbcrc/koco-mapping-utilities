@@ -1,51 +1,49 @@
 // Copyright (c) CBC/Radio-Canada. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-define(['knockout'],
-    function(ko) {
-        'use strict';
+import ko from 'knockout';
 
-        function KnockoutMappingUtilities() {}
 
-        KnockoutMappingUtilities.prototype.mapAsObservableValueObjects = function(mapping, complexAttributeNames) {
-            var self = this;
+function KnockoutMappingUtilities() {}
 
-            for (var i = 0; i < complexAttributeNames.length; i++) {
-                self.mapAsObservableValueObject(mapping, complexAttributeNames[i]);
-            }
-        };
+KnockoutMappingUtilities.prototype.mapAsObservableValueObjects = function(mapping, complexAttributeNames) {
+    var self = this;
 
-        KnockoutMappingUtilities.prototype.mapAsObservableValueObject = function(mapping, complexAttributeName) {
-            mapping[complexAttributeName] = {
-                update: asObservableValueObject
-            };
-        };
+    for (var i = 0; i < complexAttributeNames.length; i++) {
+        self.mapAsObservableValueObject(mapping, complexAttributeNames[i]);
+    }
+};
 
-        KnockoutMappingUtilities.prototype.toJS = function(x) {
-            if(!x){
-                return x;
-            }
+KnockoutMappingUtilities.prototype.mapAsObservableValueObject = function(mapping, complexAttributeName) {
+    mapping[complexAttributeName] = {
+        update: asObservableValueObject
+    };
+};
 
-            var result = ko.unwrap(x);
+KnockoutMappingUtilities.prototype.toJS = function(x) {
+    if (!x) {
+        return x;
+    }
 
-            if(!result){
-                return result;
-            }
+    var result = ko.unwrap(x);
 
-            if(result.__ko_mapping__){
-                return ko.mapping.toJS(result);
-            }
+    if (!result) {
+        return result;
+    }
 
-            return ko.toJS(result);
-        };
+    if (result.__ko_mapping__) {
+        return ko.mapping.toJS(result);
+    }
 
-        function asObservableValueObject(options) {
-            if (!options.data) {
-                return null;
-            }
+    return ko.toJS(result);
+};
 
-            return ko.observable(options.data);
-        }
+function asObservableValueObject(options) {
+    if (!options.data) {
+        return null;
+    }
 
-        return new KnockoutMappingUtilities();
-    });
+    return ko.observable(options.data);
+}
+
+export default new KnockoutMappingUtilities();
